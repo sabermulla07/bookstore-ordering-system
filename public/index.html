@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookVerse | Online Book Store - Modern, Fast & Responsive</title>
+  
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Status & Announcement Bar -->
+  <div class="top-bar">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-truck me-1"></i>Free Delivery on Orders Over ₹500 across India</span>
+        <span class="d-none d-md-inline text-secondary">|</span>
+        <span class="d-none d-md-inline"><i class="bi bi-shield-check me-1"></i>100% Genuine Publications</span>
+      </div>
+      <div>
+        <span id="db-status-badge" class="db-badge">
+          <span class="db-indicator-dot"></span> Checking Database...
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-icon">
+          <i class="bi bi-book-half"></i>
+        </div>
+        <span>Book<span style="color:var(--secondary)">Verse</span></span>
+      </a>
+
+      <!-- Mobile Toggle -->
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+          <li class="nav-item">
+            <a class="nav-link active" href="/"><i class="bi bi-house-door me-1"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/catalogue"><i class="bi bi-grid me-1"></i>Catalogue</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/catalogue?category=web-development"><i class="bi bi-code-square me-1"></i>Tech & CS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/catalogue?category=fiction-literature"><i class="bi bi-feather me-1"></i>Literature</a>
+          </li>
+        </ul>
+
+        <!-- Live Search in Nav -->
+        <form class="d-flex me-lg-3 my-2 my-lg-0" id="nav-search-form" style="min-width: 250px;">
+          <div class="input-group">
+            <input type="text" class="form-control rounded-start-pill border-end-0 bg-light" id="nav-search-input" placeholder="Search title, author, ISBN..." aria-label="Search">
+            <button class="btn btn-outline-secondary rounded-end-pill border-start-0 bg-light text-primary" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Cart Button -->
+        <a href="/cart" class="cart-btn me-3 my-2 my-lg-0">
+          <i class="bi bi-cart3 fs-5"></i>
+          <span class="d-none d-sm-inline">Cart</span>
+          <span class="cart-count" id="navbar-cart-count">0</span>
+        </a>
+
+        <!-- Auth Action Container (Dynamic based on login session) -->
+        <div id="navbar-auth-container" class="d-flex align-items-center">
+          <a href="/login" class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold me-2">Sign In</a>
+          <a href="/register" class="btn btn-primary rounded-pill px-3 py-1 fw-semibold">Register</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- 1. Hero Section -->
+    <section class="hero-section">
+      <div class="container position-relative">
+        <div class="row align-items-center">
+          <div class="col-lg-7">
+            <div class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">
+              <i class="bi bi-stars me-1"></i>Curated Academic & Professional Books
+            </div>
+            <h1 class="hero-title">
+              Expand Your Mind, <br>
+              One <span>Chapter</span> at a Time.
+            </h1>
+            <p class="hero-lead">
+              Discover over 10,000+ handpicked books in Computer Science, Full Stack Engineering, AI, Classic Literature, and Personal Finance.
+            </p>
+            
+            <!-- Quick Search Form -->
+            <form action="/catalogue" method="GET" class="search-box-hero">
+              <i class="bi bi-search ms-3 text-muted"></i>
+              <input type="text" name="search" placeholder="Search by book title, author, or technology..." required>
+              <button type="submit">Explore</button>
+            </form>
+
+            <!-- Stats Row -->
+            <div class="hero-stats">
+              <div class="stat-item">
+                <h3>10k+</h3>
+                <p>Titles in Stock</p>
+              </div>
+              <div class="stat-item border-start ps-4 border-secondary">
+                <h3>4.9★</h3>
+                <p>Reader Reviews</p>
+              </div>
+              <div class="stat-item border-start ps-4 border-secondary">
+                <h3>24hr</h3>
+                <p>Dispatch Guarantee</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5 text-center mt-5 mt-lg-0">
+            <div class="position-relative d-inline-block">
+              <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80" 
+                   alt="Book Collection" 
+                   class="img-fluid rounded-4 shadow-lg"
+                   style="max-height: 420px; object-fit: cover; border: 4px solid rgba(255,255,255,0.2);">
+              <div class="position-absolute bottom-0 start-0 translate-middle-y bg-white text-dark p-3 rounded-4 shadow-lg text-start ms-n3" style="max-width: 220px;">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <i class="bi bi-award-fill text-warning fs-4"></i>
+                  <div>
+                    <h6 class="mb-0 fw-bold">Best Seller</h6>
+                    <small class="text-muted">Algorithms & ML</small>
+                  </div>
+                </div>
+                <div class="stars small"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Value Features Row -->
+    <section class="py-4 bg-white border-bottom">
+      <div class="container">
+        <div class="row g-4 text-center text-md-start">
+          <div class="col-md-3 d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+            <div class="fs-2 text-primary"><i class="bi bi-lightning-charge"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">Fast Express Delivery</h6>
+              <small class="text-muted">Shipped within 24 hours</small>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+            <div class="fs-2 text-warning"><i class="bi bi-shield-lock"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">100% Secure Payments</h6>
+              <small class="text-muted">SSL Encrypted Checkout</small>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+            <div class="fs-2 text-success"><i class="bi bi-arrow-repeat"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">Easy 7-Day Returns</h6>
+              <small class="text-muted">Hassle-free exchange policy</small>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+            <div class="fs-2 text-info"><i class="bi bi-headset"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">24/7 Reader Support</h6>
+              <small class="text-muted">Direct academic assistance</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Popular Categories -->
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+          <div>
+            <span class="text-primary fw-bold text-uppercase small letter-spacing">Explore Genres</span>
+            <h2 class="fw-bold mt-1">Browse by Category</h2>
+          </div>
+          <a href="/catalogue" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+            View All Genres <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+
+        <div class="row g-3" id="categories-container">
+          <!-- Dynamic Categories Loaded via JS -->
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/catalogue?category=web-development" class="category-card">
+              <div class="category-icon"><i class="bi bi-code-slash"></i></div>
+              <h6 class="category-title">Web Dev</h6>
+              <p class="category-desc">Node.js, React & DB</p>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/catalogue?category=computer-science" class="category-card">
+              <div class="category-icon"><i class="bi bi-cpu"></i></div>
+              <h6 class="category-title">Comp. Sci</h6>
+              <p class="category-desc">Algorithms & Arch.</p>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/catalogue?category=artificial-intelligence" class="category-card">
+              <div class="category-icon"><i class="bi bi-robot"></i></div>
+              <h6 class="category-title">AI & ML</h6>
+              <p class="category-desc">Deep Learning & NLP</p>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/catalogue?category=fiction-literature" class="category-card">
+              <div class="category-icon"><i class="bi bi-journal-bookmark"></i></div>
+              <h6 class="category-title">Literature</h6>
+              <p class="category-desc">Dystopian & Sci-Fi</p>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/catalogue?category=business-finance" class="category-card">
+              <div class="category-icon"><i class="bi bi-graph-up-arrow"></i></div>
+              <h6 class="category-title">Finance</h6>
+              <p class="category-desc">Startups & Wealth</p>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/catalogue?category=self-improvement" class="category-card">
+              <div class="category-icon"><i class="bi bi-lightbulb"></i></div>
+              <h6 class="category-title">Self Growth</h6>
+              <p class="category-desc">Habits & Mindset</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Featured Books Section -->
+    <section class="py-5 bg-white border-top border-bottom">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+          <div>
+            <span class="badge bg-danger-subtle text-danger px-3 py-1 rounded-pill fw-bold">Staff Picks</span>
+            <h2 class="fw-bold mt-2">Featured Books This Month</h2>
+            <p class="text-muted mb-0">Top-rated books selected by our curriculum editors and software developers.</p>
+          </div>
+          <a href="/catalogue" class="btn btn-primary rounded-pill px-4">
+            See Full Catalogue <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+
+        <div class="row g-4" id="featured-books-row">
+          <!-- Populated dynamically via JS -->
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading featured books...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Promotional Call-to-Action Banner -->
+    <section class="py-5">
+      <div class="container">
+        <div class="rounded-4 p-5 text-white position-relative overflow-hidden" 
+             style="background: linear-gradient(135deg, #1e3a8a 0%, #065f46 100%);">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">Limited Academic Offer</span>
+              <h2 class="fw-bold display-6 mb-3">Get Flat 25% Off on All Web Technology & Node.js Books!</h2>
+              <p class="lead mb-4 text-light" style="opacity: 0.9;">
+                Equip yourself with comprehensive guides on Node.js, Express, MySQL, REST APIs, and modern responsive design.
+              </p>
+              <div class="d-flex gap-3 flex-wrap">
+                <a href="/catalogue?category=web-development" class="btn btn-warning btn-lg px-4 fw-bold rounded-pill text-dark">
+                  Claim Discount Now
+                </a>
+                <a href="/register" class="btn btn-outline-light btn-lg px-4 rounded-pill">
+                  Create Free Account
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 text-center d-none d-lg-block">
+              <i class="bi bi-mortarboard-fill display-1" style="opacity: 0.25; font-size: 8rem;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Quick View Modal -->
+  <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 pt-0" id="quick-view-modal-content">
+          <!-- Loaded dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Book Modal (Admin Feature) -->
+  <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2"></i>Add New Book to Database</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="add-book-form">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label">Book Title *</label>
+              <input type="text" class="form-control" name="title" required placeholder="e.g. Mastering Node.js & MySQL">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label">Author *</label>
+                <input type="text" class="form-control" name="author" required placeholder="e.g. John Doe">
+              </div>
+              <div class="col-6">
+                <label class="form-label">Category *</label>
+                <select class="form-select" name="category_id" required>
+                  <option value="1">Web Development</option>
+                  <option value="2">Computer Science</option>
+                  <option value="3">Artificial Intelligence</option>
+                  <option value="4">Fiction & Literature</option>
+                  <option value="5">Business & Finance</option>
+                  <option value="6">Self-Improvement</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label">Price (₹) *</label>
+                <input type="number" class="form-control" name="price" required step="0.5" placeholder="499.00">
+              </div>
+              <div class="col-6">
+                <label class="form-label">ISBN</label>
+                <input type="text" class="form-control" name="isbn" placeholder="978-0123456789">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="3" placeholder="Brief book summary..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Cover Image URL</label>
+              <input type="url" class="form-control" name="cover_image" placeholder="https://images.unsplash.com/...">
+            </div>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">Insert into Database</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Responsive Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-brand">
+            <i class="bi bi-book-half text-warning"></i>
+            <span>BookVerse</span>
+          </div>
+          <p class="small text-secondary mb-3">
+            An online bookstore built with Node.js, Express, and MySQL. Featuring complete user authentication, dynamic catalogue filtering, shopping cart, and order processing.
+          </p>
+          <div class="d-flex gap-2">
+            <span class="badge bg-primary">Node.js</span>
+            <span class="badge bg-success">Express</span>
+            <span class="badge bg-warning text-dark">MySQL</span>
+            <span class="badge bg-info text-dark">Bootstrap 5</span>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-6">
+          <h6 class="text-white fw-bold mb-3">Navigation</h6>
+          <ul class="footer-links">
+            <li><a href="/">1. Home Page</a></li>
+            <li><a href="/login">2. Login Page</a></li>
+            <li><a href="/catalogue">3. Catalogue Page</a></li>
+            <li><a href="/register">4. Registration Page</a></li>
+            <li><a href="/cart">Shopping Cart</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-6">
+          <h6 class="text-white fw-bold mb-3">Top Genres</h6>
+          <ul class="footer-links">
+            <li><a href="/catalogue?category=web-development">Web Technologies</a></li>
+            <li><a href="/catalogue?category=computer-science">Computer Science</a></li>
+            <li><a href="/catalogue?category=artificial-intelligence">AI & Data Science</a></li>
+            <li><a href="/catalogue?category=fiction-literature">Classic Literature</a></li>
+            <li><a href="/catalogue?category=business-finance">Business & Finance</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+          <h6 class="text-white fw-bold mb-3">Web Technology Lab 06</h6>
+          <p class="small text-secondary">
+            <strong>Lab Objective:</strong> Design and develop a responsive website for an online book store using Node JS and MySQL/MongoDB having Home, Login, Catalogue, and Registration pages.
+          </p>
+          <div class="card bg-dark border-secondary p-3 mt-2">
+            <small class="text-light">
+              <i class="bi bi-person-badge me-2 text-warning"></i><strong>Student Name:</strong> Saber Mulla<br>
+              <i class="bi bi-server me-2 text-info"></i><strong>Backend:</strong> Node.js & Express<br>
+              <i class="bi bi-database-check me-2 text-success"></i><strong>Database:</strong> MySQL 8.0 / Schema Engine
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
+        <div>&copy; 2026 BookVerse. Developed for Web Technology Practical Submission.</div>
+        <div class="text-muted">All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Shared JS -->
+  <script src="/js/main.js"></script>
+  <!-- Home Page Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadFeaturedBooks();
+      setupAddBookForm();
+    });
+
+    async function loadFeaturedBooks() {
+      const container = document.getElementById('featured-books-row');
+      try {
+        const res = await fetch('/api/books?featured=1');
+        const data = await res.json();
+        if (data.success && data.books.length > 0) {
+          container.innerHTML = data.books.slice(0, 4).map(book => renderBookCard(book)).join('');
+        } else {
+          container.innerHTML = `<div class="col-12 text-center text-muted py-4">No featured books at the moment.</div>`;
+        }
+      } catch (err) {
+        console.error('Error loading featured books:', err);
+        container.innerHTML = `<div class="col-12 text-center text-danger py-4">Unable to load featured books.</div>`;
+      }
+    }
+
+    function renderBookCard(book) {
+      const discount = book.original_price ? Math.round(((book.original_price - book.price) / book.original_price) * 100) : 0;
+      return `
+        <div class="col-sm-6 col-lg-3">
+          <div class="book-card">
+            <div class="book-cover-wrap">
+              <img src="${escapeHtml(book.cover_image)}" alt="${escapeHtml(book.title)}" class="book-cover-img" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&auto=format&fit=crop&q=80'">
+              ${discount > 0 ? `<span class="book-badge-discount">${discount}% OFF</span>` : ''}
+              <span class="book-badge-category">${escapeHtml(book.category_name || 'Academic')}</span>
+            </div>
+            <div class="book-card-body">
+              <h5 class="book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</h5>
+              <div class="book-author"><i class="bi bi-person me-1"></i>${escapeHtml(book.author)}</div>
+              <div class="book-rating">
+                <span class="stars"><i class="bi bi-star-fill"></i></span>
+                <span class="fw-bold">${book.rating || 4.5}</span>
+                <span class="text-muted">(${book.reviews_count || 42})</span>
+              </div>
+              <div class="book-price-row">
+                <div>
+                  <span class="current-price">₹${parseFloat(book.price).toFixed(2)}</span>
+                  ${book.original_price ? `<span class="original-price">₹${parseFloat(book.original_price).toFixed(2)}</span>` : ''}
+                </div>
+                <span class="badge ${book.stock > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} rounded-pill">
+                  ${book.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                </span>
+              </div>
+              <div class="book-actions">
+                <button class="btn-add-cart" onclick='addToCart(${JSON.stringify(book).replace(/'/g, "&apos;")})'>
+                  <i class="bi bi-cart-plus"></i> Add
+                </button>
+                <button class="btn-quick-view" onclick="openQuickView(${book.id})" title="Quick View">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function openQuickView(bookId) {
+      try {
+        const res = await fetch(`/api/books/${bookId}`);
+        const data = await res.json();
+        if (data.success && data.book) {
+          const b = data.book;
+          const modalBody = document.getElementById('quick-view-modal-content');
+          modalBody.innerHTML = `
+            <div class="row g-4">
+              <div class="col-md-5 text-center">
+                <img src="${escapeHtml(b.cover_image)}" alt="${escapeHtml(b.title)}" class="img-fluid rounded-3 shadow" style="max-height: 320px; object-fit: cover;">
+              </div>
+              <div class="col-md-7">
+                <span class="badge bg-primary-subtle text-primary mb-2">${escapeHtml(b.category_name || 'Academic')}</span>
+                <h4 class="fw-bold mb-1">${escapeHtml(b.title)}</h4>
+                <p class="text-muted mb-2">By <strong>${escapeHtml(b.author)}</strong></p>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <span class="text-warning"><i class="bi bi-star-fill"></i> ${b.rating}</span>
+                  <span class="text-muted">(${b.reviews_count} reviews)</span>
+                  <span class="badge bg-success-subtle text-success ms-2">${b.stock} Copies in Stock</span>
+                </div>
+                <div class="mb-3">
+                  <span class="fs-3 fw-bold text-primary">₹${parseFloat(b.price).toFixed(2)}</span>
+                  ${b.original_price ? `<span class="text-muted text-decoration-line-through ms-2">₹${parseFloat(b.original_price).toFixed(2)}</span>` : ''}
+                </div>
+                <p class="text-secondary small mb-3">${escapeHtml(b.description)}</p>
+                <div class="small text-muted mb-4 border-top pt-2">
+                  <div><strong>ISBN:</strong> ${escapeHtml(b.isbn || 'N/A')}</div>
+                  <div><strong>Publisher:</strong> ${escapeHtml(b.publisher || 'Tech Media')}</div>
+                  <div><strong>Pages:</strong> ${b.pages || 350} pages</div>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-primary rounded-pill px-4 flex-grow-1" onclick='addToCart(${JSON.stringify(b).replace(/'/g, "&apos;")}); bootstrap.Modal.getInstance(document.getElementById("quickViewModal")).hide();'>
+                    <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                  </button>
+                  <a href="/cart" class="btn btn-warning rounded-pill px-4 text-dark fw-bold" onclick='addToCart(${JSON.stringify(b).replace(/'/g, "&apos;")})'>
+                    Buy Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+          const modal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+          modal.show();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function setupAddBookForm() {
+      const form = document.getElementById('add-book-form');
+      if (!form) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+        try {
+          const res = await fetch('/api/books', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast('Book successfully added to Database!', 'success');
+            form.reset();
+            bootstrap.Modal.getInstance(document.getElementById('addBookModal')).hide();
+            loadFeaturedBooks();
+          } else {
+            showToast(data.message || 'Failed to add book.', 'error');
+          }
+        } catch (err) {
+          showToast('Server connection error.', 'error');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

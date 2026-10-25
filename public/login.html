@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | BookVerse Online Book Store</title>
+  
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-light">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span><i class="bi bi-shield-lock me-1"></i>Secure Database Authentication (Bcrypt Hashing)</span>
+      <span id="db-status-badge" class="db-badge"><span class="db-indicator-dot"></span> Checking DB...</span>
+    </div>
+  </div>
+
+  <!-- Main Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-icon"><i class="bi bi-book-half"></i></div>
+        <span>Book<span style="color:var(--secondary)">Verse</span></span>
+      </a>
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <a href="/catalogue" class="nav-link"><i class="bi bi-grid me-1"></i>Catalogue</a>
+        <a href="/register" class="btn btn-outline-primary rounded-pill px-3 py-1">New User? Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login Main Content -->
+  <main class="auth-wrapper">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+          <div class="auth-card">
+            <div class="row g-0">
+              <!-- Left Sidebar Branding -->
+              <div class="col-lg-5 auth-sidebar d-none d-lg-flex">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-4">
+                    <i class="bi bi-book fs-3 text-warning"></i>
+                    <h4 class="mb-0 fw-bold">BookVerse Portal</h4>
+                  </div>
+                  <h2>Welcome Back, Scholar.</h2>
+                  <p class="text-light" style="opacity: 0.85;">
+                    Sign in to access your curated library, track textbook orders, and explore specialized software engineering volumes.
+                  </p>
+                  <ul class="auth-features-list">
+                    <li><i class="bi bi-check-circle-fill"></i> Instant Access to 10k+ Books</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Student Discounts & Offers</li>
+                    <li><i class="bi bi-check-circle-fill"></i> MySQL Powered Order History</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Express Delivery Tracking</li>
+                  </ul>
+                </div>
+
+                <div class="pt-4 border-top border-secondary">
+                  <small class="text-light" style="opacity: 0.75;">
+                    <i class="bi bi-quote fs-4 text-warning"></i> "A reader lives a thousand lives before he dies."
+                  </small>
+                </div>
+              </div>
+
+              <!-- Right Form Column -->
+              <div class="col-lg-7 auth-form-wrap">
+                <div class="mb-4">
+                  <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-1 rounded-pill mb-2">
+                    <i class="bi bi-person-lock me-1"></i>Member Sign In
+                  </span>
+                  <h2 class="auth-title">Login to Your Account</h2>
+                  <p class="auth-subtitle">Enter your registered email address or username and password.</p>
+                </div>
+
+                <!-- Alert Feedback Box -->
+                <div id="login-alert" class="alert d-none" role="alert"></div>
+
+                <!-- Login Form -->
+                <form id="login-form">
+                  <div class="mb-3">
+                    <label for="identifier" class="form-label">Email Address or Username *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                      <input type="text" class="form-control border-start-0 ps-0" id="identifier" name="identifier" required placeholder="e.g. saber@example.com or sabermulla" autocomplete="username">
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                      <label for="password" class="form-label">Password *</label>
+                      <a href="javascript:void(0)" onclick="showToast('For lab demonstration, please use the Demo Credentials below.', 'info')" class="small text-decoration-none text-primary">Forgot Password?</a>
+                    </div>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+                      <input type="password" class="form-control border-start-0 border-end-0 ps-0" id="password" name="password" required placeholder="Enter your secret password" autocomplete="current-password">
+                      <button class="btn btn-outline-secondary border-start-0 bg-light" type="button" id="togglePassword">
+                        <i class="bi bi-eye" id="eyeIcon"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                      <label class="form-check-label small text-muted" for="rememberMe">
+                        Keep me signed in
+                      </label>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm" id="btn-login-submit">
+                    <span id="btn-login-text"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</span>
+                    <span id="btn-login-spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                  </button>
+                </form>
+
+                <!-- Demo Account Quick-Fill Box for Lab Evaluation -->
+                <div class="demo-account-box">
+                  <div class="demo-title"><i class="bi bi-stars text-warning me-1"></i>One-Click Demo Credentials (For Examiner & Evaluation)</div>
+                  <div class="d-flex gap-2 flex-wrap">
+                    <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="fillCredentials('sabermulla', 'password123')">
+                      <i class="bi bi-person me-1"></i>Student Demo (sabermulla)
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="fillCredentials('admin', 'password123')">
+                      <i class="bi bi-shield-check me-1"></i>Admin Demo (admin)
+                    </button>
+                  </div>
+                </div>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                  <p class="text-muted small mb-0">
+                    Don't have an account yet? 
+                    <a href="/register" class="fw-bold text-primary text-decoration-none">Create Account (Registration Page)</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-4 text-center text-muted small">
+    <div class="container">
+      WT Lab 06 Assignment &bull; Node.js & MySQL &bull; Responsive Book Store
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Shared JS -->
+  <script src="/js/main.js"></script>
+  <!-- Login Logic -->
+  <script>
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      eyeIcon.className = type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+    });
+
+    // Autofill demo buttons
+    function fillCredentials(user, pass) {
+      document.getElementById('identifier').value = user;
+      document.getElementById('password').value = pass;
+      showToast(`Autofilled demo credentials for: ${user}`, 'info');
+    }
+
+    // Form Submission
+    const form = document.getElementById('login-form');
+    const alertBox = document.getElementById('login-alert');
+    const btnSubmit = document.getElementById('btn-login-submit');
+    const btnText = document.getElementById('btn-login-text');
+    const btnSpinner = document.getElementById('btn-login-spinner');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.className = 'alert d-none';
+
+      const identifier = document.getElementById('identifier').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!identifier || !password) {
+        alertBox.className = 'alert alert-danger';
+        alertBox.textContent = 'Please enter both email/username and password.';
+        return;
+      }
+
+      // UI Loading state
+      btnSubmit.disabled = true;
+      btnText.classList.add('d-none');
+      btnSpinner.classList.remove('d-none');
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i>${data.message} Redirecting to Catalogue...`;
+          showToast(data.message, 'success');
+          
+          setTimeout(() => {
+            const redirectUrl = new URLSearchParams(window.location.search).get('redirect') || '/catalogue';
+            window.location.href = redirectUrl;
+          }, 1000);
+        } else {
+          alertBox.className = 'alert alert-danger';
+          alertBox.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i>${data.message}`;
+          btnSubmit.disabled = false;
+          btnText.classList.remove('d-none');
+          btnSpinner.classList.add('d-none');
+        }
+      } catch (err) {
+        alertBox.className = 'alert alert-danger';
+        alertBox.textContent = 'Server connection error. Please try again.';
+        btnSubmit.disabled = false;
+        btnText.classList.remove('d-none');
+        btnSpinner.classList.add('d-none');
+      }
+    });
+  </script>
+</body>
+</html>

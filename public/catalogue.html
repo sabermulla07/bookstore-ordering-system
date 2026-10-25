@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Catalogue | BookVerse Online Book Store</title>
+  
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-book me-1"></i><span>Online Book Store Catalogue &bull; Web Technology Lab 06</span>
+      </div>
+      <div>
+        <span id="db-status-badge" class="db-badge">
+          <span class="db-indicator-dot"></span> Checking DB...
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-icon"><i class="bi bi-book-half"></i></div>
+        <span>Book<span style="color:var(--secondary)">Verse</span></span>
+      </a>
+
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+          <li class="nav-item">
+            <a class="nav-link" href="/"><i class="bi bi-house-door me-1"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/catalogue"><i class="bi bi-grid me-1"></i>Catalogue</a>
+          </li>
+        </ul>
+
+        <!-- Cart Button -->
+        <a href="/cart" class="cart-btn me-3 my-2 my-lg-0">
+          <i class="bi bi-cart3 fs-5"></i>
+          <span class="d-none d-sm-inline">Cart</span>
+          <span class="cart-count" id="navbar-cart-count">0</span>
+        </a>
+
+        <!-- Dynamic Auth Container -->
+        <div id="navbar-auth-container" class="d-flex align-items-center">
+          <a href="/login" class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold me-2">Sign In</a>
+          <a href="/register" class="btn btn-primary rounded-pill px-3 py-1 fw-semibold">Register</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Catalogue Header & Breadcrumb -->
+  <div class="catalogue-header">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-2 small">
+          <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Home</a></li>
+          <li class="breadcrumb-item active text-primary fw-semibold" aria-current="page">Book Catalogue</li>
+        </ol>
+      </nav>
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h1 class="h3 fw-bold mb-1">Browse Book Catalogue</h1>
+          <p class="text-muted mb-0 small">Explore our extensive database collection with real-time category filtering and search.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addBookModal">
+            <i class="bi bi-plus-circle me-1"></i>Add New Book
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Catalogue Main Section -->
+  <main class="container mb-5">
+    <div class="row g-4">
+      
+      <!-- 1. Filters Sidebar (Desktop) -->
+      <aside class="col-lg-3">
+        <!-- Mobile Filter Toggle Button -->
+        <div class="d-lg-none mb-3">
+          <button class="btn btn-outline-primary w-100 rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+            <i class="bi bi-funnel me-1"></i>Toggle Filter Options
+          </button>
+        </div>
+
+        <div class="collapse d-lg-block" id="filterCollapse">
+          <div class="filter-sidebar">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold mb-0"><i class="bi bi-sliders me-2 text-primary"></i>Filters</h5>
+              <button type="button" class="btn btn-link btn-sm text-decoration-none text-muted p-0" id="btn-reset-filters">
+                Reset All
+              </button>
+            </div>
+
+            <!-- Search Filter -->
+            <div class="mb-4">
+              <label class="form-label small text-muted text-uppercase fw-bold">Search Titles / Authors</label>
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm" id="filter-search" placeholder="Type keywords...">
+                <button class="btn btn-outline-secondary btn-sm" id="btn-search-trigger" type="button">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="mb-4">
+              <div class="filter-heading">Categories</div>
+              <div class="d-flex flex-column gap-1" id="category-filter-list">
+                <a href="javascript:void(0)" class="category-filter-item active" data-category="all">
+                  <span><i class="bi bi-collection me-2"></i>All Genres</span>
+                  <span class="badge bg-light text-dark rounded-pill" id="badge-all-count">12</span>
+                </a>
+                <a href="javascript:void(0)" class="category-filter-item" data-category="web-development">
+                  <span><i class="bi bi-code-slash me-2"></i>Web Development</span>
+                </a>
+                <a href="javascript:void(0)" class="category-filter-item" data-category="computer-science">
+                  <span><i class="bi bi-cpu me-2"></i>Computer Science</span>
+                </a>
+                <a href="javascript:void(0)" class="category-filter-item" data-category="artificial-intelligence">
+                  <span><i class="bi bi-robot me-2"></i>AI & ML</span>
+                </a>
+                <a href="javascript:void(0)" class="category-filter-item" data-category="fiction-literature">
+                  <span><i class="bi bi-journal-bookmark me-2"></i>Literature</span>
+                </a>
+                <a href="javascript:void(0)" class="category-filter-item" data-category="business-finance">
+                  <span><i class="bi bi-graph-up-arrow me-2"></i>Business & Finance</span>
+                </a>
+                <a href="javascript:void(0)" class="category-filter-item" data-category="self-improvement">
+                  <span><i class="bi bi-lightbulb me-2"></i>Self-Improvement</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="mb-4">
+              <div class="filter-heading">Maximum Price</div>
+              <input type="range" class="form-range" id="price-range" min="200" max="1500" step="50" value="1500">
+              <div class="d-flex justify-content-between small text-muted mt-1">
+                <span>₹200</span>
+                <span class="fw-bold text-primary" id="price-range-val">₹1,500</span>
+              </div>
+            </div>
+
+            <!-- Quick Tariff / Budget Filters -->
+            <div class="mb-3">
+              <div class="filter-heading">Budget Presets</div>
+              <div class="d-flex flex-wrap gap-1">
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill filter-budget-btn" data-max="400">Under ₹400</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill filter-budget-btn" data-max="700">Under ₹700</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill filter-budget-btn" data-max="1000">Under ₹1000</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 2. Catalogue Results Main Area -->
+      <section class="col-lg-9">
+        
+        <!-- Controls Bar: Item count, Sorting, View Toggle -->
+        <div class="bg-white border rounded-3 p-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3 shadow-sm">
+          <div>
+            <span class="text-muted small">Showing </span>
+            <strong id="catalogue-count-text">Loading books...</strong>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <!-- Sort dropdown -->
+            <div class="d-flex align-items-center gap-2">
+              <label for="sort-select" class="small text-muted text-nowrap mb-0">Sort By:</label>
+              <select class="form-select form-select-sm" id="sort-select" style="width: 175px;">
+                <option value="featured">Featured Picks</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="title">Title: A to Z</option>
+              </select>
+            </div>
+
+            <!-- View Mode Switcher -->
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-secondary active" id="btn-view-grid" title="Grid View">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+              </button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-view-list" title="List View">
+                <i class="bi bi-list-ul"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Books Output Grid -->
+        <div class="row g-4" id="catalogue-books-container">
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading catalogue...</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Quick View Modal -->
+  <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 pt-0" id="quick-view-modal-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Book Modal (Database Insertion) -->
+  <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2"></i>Add New Book (Insert into Database)</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="add-book-form">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label">Book Title *</label>
+              <input type="text" class="form-control" name="title" required placeholder="e.g. Node.js & MySQL Engineering">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label">Author *</label>
+                <input type="text" class="form-control" name="author" required placeholder="e.g. Dr. A. P. Rao">
+              </div>
+              <div class="col-6">
+                <label class="form-label">Category *</label>
+                <select class="form-select" name="category_id" required>
+                  <option value="1">Web Development</option>
+                  <option value="2">Computer Science</option>
+                  <option value="3">Artificial Intelligence</option>
+                  <option value="4">Fiction & Literature</option>
+                  <option value="5">Business & Finance</option>
+                  <option value="6">Self-Improvement</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label">Price (₹) *</label>
+                <input type="number" class="form-control" name="price" required step="0.5" placeholder="550.00">
+              </div>
+              <div class="col-6">
+                <label class="form-label">ISBN</label>
+                <input type="text" class="form-control" name="isbn" placeholder="978-0139999999">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="3" placeholder="Book synopsis and key takeaways..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Cover Image URL</label>
+              <input type="url" class="form-control" name="cover_image" placeholder="https://images.unsplash.com/...">
+            </div>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">Save to Database</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container text-center">
+      <div class="footer-brand justify-content-center">
+        <i class="bi bi-book-half text-warning"></i>
+        <span>BookVerse Online Store</span>
+      </div>
+      <p class="text-secondary small mb-3">
+        Full Stack Node.js & MySQL Web Technology Project &bull; Lab Assignment 06
+      </p>
+      <div class="text-muted small">
+        &copy; 2026 Saber Mulla &bull; Computer Engineering
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Shared JS -->
+  <script src="/js/main.js"></script>
+  <!-- Catalogue Dynamic Script -->
+  <script src="/js/catalogue.js"></script>
+</body>
+</html>
